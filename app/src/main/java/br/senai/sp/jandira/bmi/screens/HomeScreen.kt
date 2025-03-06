@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -24,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -113,8 +117,15 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                         TextField(
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
-                                capitalization = KeyboardCapitalization.Words
+                                capitalization = KeyboardCapitalization.Words,
                             ),
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Email,
+                                    contentDescription =  "",
+                                    tint = Color(0xFF3C0F4E)
+                                )
+                            },
                             value = nameState.value,
                             onValueChange = {
                                 nameState.value= it
