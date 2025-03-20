@@ -12,4 +12,11 @@
     <string name="weight">Peso</string>
     <string name="height">Altura</string>
     <string name="calculate">Calcular</string>
+    <string name="yourbmi">Seu resultado BMI</string>
+    <string name="value">36,6</string>
+    <string name="youhave">Você tem classe 1 de Obesidade</string>
+    <string name="age50">50</string>
+    <string name="weight97">97Kg</string>
+    <string name="height178">178cm</string>
+    <string name="newcalc">Novo Calculo</string>
 </resources>

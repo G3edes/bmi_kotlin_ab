@@ -211,8 +211,8 @@ fun UserDateScreen(modifier: Modifier=Modifier){
         }
         }
     }
-@Preview(showSystemUi = true)
-@Composable
-private fun UserScreenPreview() {
-    UserDateScreen()
-}
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun UserScreenPreview() {
+//    UserDateScreen()
+//}

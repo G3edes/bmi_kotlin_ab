@@ -21,7 +21,8 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navegacao,
                         startDestination = "home",
-                ){
+                    )
+                    {
                         composable(route="home"){ HomeScreen(navegacao)}
                         composable(route="dados"){ UserDateScreen() }
                     }
