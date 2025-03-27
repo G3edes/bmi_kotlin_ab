@@ -218,12 +218,13 @@ fun UserDateScreen(navegacao: NavHostController?) {
                                     contentDescription = "",
                                     tint = Color.Red
                                 )
-                                Icon(
-                                    imageVector = Icons.Default.DateRange,
-                                    contentDescription = "",
-                                    tint = (Color(color = 0xFF3C0F4E))
-                                )
                             }
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "",
+                                tint = (Color(color = 0xFF3C0F4E))
+                            )
+
                         }
                     )
                     OutlinedTextField(
@@ -253,12 +254,13 @@ fun UserDateScreen(navegacao: NavHostController?) {
                                     contentDescription = "",
                                     tint = Color.Red
                                 )
-                                Icon(
-                                    imageVector = Icons.Default.Balance,
-                                    contentDescription = "",
-                                    tint = (Color(color = 0xFF3C0F4E))
-                                )
                             }
+                            Icon(
+                                imageVector = Icons.Default.Balance,
+                                contentDescription = "",
+                                tint = (Color(color = 0xFF3C0F4E))
+                            )
+
                         }
                     )
                     OutlinedTextField(
@@ -288,20 +290,20 @@ fun UserDateScreen(navegacao: NavHostController?) {
                                     contentDescription = "",
                                     tint = Color.Red
                                 )
-                                Icon(
-                                    imageVector = Icons.Default.Height,
-                                    contentDescription = "",
-                                    tint = (Color(color = 0xFF3C0F4E))
-                                )
                             }
+                            Icon(
+                                imageVector = Icons.Default.Height,
+                                contentDescription = "",
+                                tint = (Color(color = 0xFF3C0F4E))
+                            )
                         }
                     )
 
                     Button(
                         onClick = {
                             if (userAge.value.isEmpty() || userHeight.value.isEmpty() || userWeight.value.isEmpty()) {
-                                iserrorstate.value=true
-                            }else {
+                                iserrorstate.value = true
+                            } else {
                                 val editor = userFile.edit()
                                 editor.putInt("user_age", userAge.value.toInt())
                                 editor.putFloat("user_weight", userWeight.value.toFloat())
