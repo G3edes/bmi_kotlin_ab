@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.bmi.screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +14,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,15 +40,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.bmi.R
+
 @Composable
 fun HomeScreen(navegacao: NavHostController) {
 
-    var nameState = remember {
-        mutableStateOf("Senai")
+    var iserrorstate = remember {
+        mutableStateOf(false)
     }
 
+    var nameState = remember {
+        mutableStateOf("")
+    }
+
+    //abrir ou criar um arquivo SharedPreferences
+
+    val context = LocalContext.current
+    val userFile = context
+        .getSharedPreferences("userFile", Context.MODE_PRIVATE)
+
+    //colocar o arquivo em modo de edição
+    val editor = userFile.edit()
+
     Box(
-        modifier=Modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
@@ -54,14 +72,14 @@ fun HomeScreen(navegacao: NavHostController) {
                     )
                 )/*0xFFB3D9FF*/
             )
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
 
-        ) {
+            ) {
             Image(
                 modifier = Modifier
                     .padding(top = 80.dp),
@@ -81,7 +99,7 @@ fun HomeScreen(navegacao: NavHostController) {
                 fontWeight = FontWeight.Bold
             )
             Card(
-                modifier=Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(500.dp),
                 shape = RoundedCornerShape(
@@ -92,15 +110,15 @@ fun HomeScreen(navegacao: NavHostController) {
                     .cardColors(
                         containerColor = Color.White
                     )
-            ){
+            ) {
                 Column(
-                    modifier=Modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(20.dp),
-                        verticalArrangement = (Arrangement.SpaceBetween)
+                    verticalArrangement = (Arrangement.SpaceBetween)
                 ) {
                     Column(
-                        modifier=Modifier
+                        modifier = Modifier
                             .padding(20.dp)
                     ) {
                         Text(
@@ -111,35 +129,60 @@ fun HomeScreen(navegacao: NavHostController) {
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold
                         )
-                        TextField(
+                        OutlinedTextField(
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
                                 capitalization = KeyboardCapitalization.Words,
                             ),
+                            isError = iserrorstate.value,
+                            supportingText = {
+                                if (iserrorstate.value) {
+                                    Text(
+                                        text = stringResource(R.string.errorname)
+                                    )
+
+
+                                }
+                            },
                             trailingIcon = {
+                                if (iserrorstate.value){
+                                    Icon(
+                                        imageVector = Icons.Default.Error,
+                                        contentDescription = "",
+                                        tint= Color.Red
+                                    )
+                                }
                                 Icon(
                                     imageVector = Icons.Default.Email,
-                                    contentDescription =  "",
+                                    contentDescription = "",
                                     tint = Color(0xFF3C0F4E)
                                 )
                             },
                             value = nameState.value,
                             onValueChange = {
-                                nameState.value= it
+                                nameState.value = it
                             },
-                            label = { Text("Digite algo...")},
+                            label = { Text("Digite algo...") },
                             modifier = Modifier
                                 .padding(top = 15.dp)
+                                .fillMaxWidth()
                         )
                     }
                     Column(
-                        modifier=Modifier
+                        modifier = Modifier
                             .fillMaxWidth(),
-                            horizontalAlignment = (Alignment.End)
-                    ){
-                        Button(onClick = {
-                            navegacao.navigate("dados")
-                        } ,
+                        horizontalAlignment = (Alignment.End)
+                    ) {
+                        Button(
+                            onClick = {
+                                if (nameState.value.isEmpty()) {
+                                    iserrorstate.value = true
+                                } else {
+                                    editor.putString("user_name", nameState.value)
+                                    editor.apply()
+                                    navegacao.navigate("dados")
+                                }
+                            },
                             shape = RoundedCornerShape(8.dp)
                         )
                         {
@@ -155,8 +198,8 @@ fun HomeScreen(navegacao: NavHostController) {
     }
 }
 
-@Preview(showSystemUi = true)
+/*@Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
-    //HomeScreen(navegacao)
-}
+    HomeScreen()
+}*/

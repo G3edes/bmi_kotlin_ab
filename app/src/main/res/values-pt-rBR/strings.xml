@@ -19,4 +19,5 @@
     <string name="weight97">97Kg</string>
     <string name="height178">178cm</string>
     <string name="newcalc">Novo Calculo</string>
+    <string name="errorname">O nome é necessário</string>
 </resources>

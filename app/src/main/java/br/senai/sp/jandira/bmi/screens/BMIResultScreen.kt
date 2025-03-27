@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.bmi.screens
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,16 +27,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import br.senai.sp.jandira.bmi.R
 
 @Composable
 
-fun BMIResultScreen(modifier: Modifier=Modifier) {
+fun BMIResultScreen(navegacao: NavHostController) {
+
+    val context = LocalContext.current
+    val userFile = context
+        .getSharedPreferences("userFile", Context.MODE_PRIVATE)
+
+
+    val userAge = userFile.getInt("user_age", 0)
+    val userWeight = userFile.getFloat("user_weight", 0.0f)
+    val userHeight = userFile.getFloat("user_height", 0.0f)
+
     Box() {
         Box(
             modifier = Modifier
@@ -123,7 +136,7 @@ fun BMIResultScreen(modifier: Modifier=Modifier) {
                                         fontSize = 15.sp,
                                     )
                                     Text(
-                                        text = stringResource(R.string.age50),
+                                        text = "$userAge",
                                         color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
@@ -145,7 +158,7 @@ fun BMIResultScreen(modifier: Modifier=Modifier) {
                                         fontSize = 15.sp,
                                     )
                                     Text(
-                                        text = stringResource(R.string.weight97),
+                                        text = "$userWeight",
                                         color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
@@ -167,7 +180,7 @@ fun BMIResultScreen(modifier: Modifier=Modifier) {
                                         fontSize = 15.sp,
                                     )
                                     Text(
-                                        text = stringResource(R.string.height178),
+                                        text = "$userHeight",
                                         color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
@@ -186,7 +199,9 @@ fun BMIResultScreen(modifier: Modifier=Modifier) {
                                 .width(300.dp)
                                 .height(3.dp)
                         )
-                        Button(onClick = {} ,
+                        Button(onClick = {
+                            navegacao.navigate("dados")
+                        } ,
                             modifier=Modifier
                                 .padding(top=20.dp),
                             shape = RoundedCornerShape(20.dp),
@@ -207,8 +222,8 @@ fun BMIResultScreen(modifier: Modifier=Modifier) {
 
 
 
-@Preview(showSystemUi = true)
+/*@Preview(showSystemUi = true)
 @Composable
 private fun BMIResultScreenPreview() {
     BMIResultScreen()
-}
+}*/
