@@ -152,11 +152,6 @@ fun HomeScreen(navegacao: NavHostController) {
                                         tint= Color.Red
                                     )
                                 }
-                                Icon(
-                                    imageVector = Icons.Default.Email,
-                                    contentDescription = "",
-                                    tint = Color(0xFF3C0F4E)
-                                )
                             },
                             value = nameState.value,
                             onValueChange = {

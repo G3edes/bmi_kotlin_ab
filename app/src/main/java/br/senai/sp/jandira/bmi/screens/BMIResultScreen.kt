@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,10 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.senai.sp.jandira.bmi.R
+import br.senai.sp.jandira.bmi.calcs.bmiCalculate
+import br.senai.sp.jandira.bmi.model.BmiStatus
+import br.senai.sp.jandira.bmi.screens.components.BmiLevel
+import br.senai.sp.jandira.bmi.utils.convertNumberToLocale
+import java.util.Locale
 
 @Composable
 
-fun BMIResultScreen(navegacao: NavHostController) {
+fun BMIResultScreen(navegacao: NavHostController?) {
 
     val context = LocalContext.current
     val userFile = context
@@ -49,6 +55,7 @@ fun BMIResultScreen(navegacao: NavHostController) {
     val userWeight = userFile.getFloat("user_weight", 0.0f)
     val userHeight = userFile.getFloat("user_height", 0.0f)
 
+    val bmi = bmiCalculate(userWeight.toInt(), userHeight.toDouble())
     Box() {
         Box(
             modifier = Modifier
@@ -92,7 +99,9 @@ fun BMIResultScreen(navegacao: NavHostController) {
                             .size(160.dp)
                             .padding(10.dp),
                             shape = CircleShape,
-                            border = BorderStroke(5.dp, Color(0xFF3C0F4E)),
+                            border = BorderStroke(
+                                width=5.dp,
+                                color = bmi.bmiColor),
                             colors = CardDefaults.cardColors(Color.White),
                         ) {
                             Column(
@@ -102,7 +111,11 @@ fun BMIResultScreen(navegacao: NavHostController) {
                                 verticalArrangement = Arrangement.Center,
                             ) {
                                 Text(
-                                    text = stringResource(R.string.value),
+                                    text = String.format(
+                                        Locale.getDefault(),
+                                        "%.1f",
+                                        bmi.bmi.second
+                                    ),
                                     color = Color(0xFF3C0F4E),
                                     fontSize = 40.sp,
                                     fontWeight = FontWeight.Bold
@@ -111,7 +124,7 @@ fun BMIResultScreen(navegacao: NavHostController) {
 
                         }
                         Text(
-                            text = stringResource(R.string.youhave),
+                            text = "${bmi.bmiStatus}",
                             fontSize = 25.sp
                         )
                         Card(
@@ -158,7 +171,7 @@ fun BMIResultScreen(navegacao: NavHostController) {
                                         fontSize = 15.sp,
                                     )
                                     Text(
-                                        text = "$userWeight",
+                                        text = "${userWeight}Kg",
                                         color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
@@ -180,7 +193,7 @@ fun BMIResultScreen(navegacao: NavHostController) {
                                         fontSize = 15.sp,
                                     )
                                     Text(
-                                        text = "$userHeight",
+                                        text = "${userHeight}cm",
                                         color = Color.White,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold
@@ -190,18 +203,30 @@ fun BMIResultScreen(navegacao: NavHostController) {
                         }
                         Column (
                             modifier=Modifier
-                                .background(Color.Black)
                                 .height(290.dp)
                                 .width(350.dp)
-                        ){  }
+                        ){
+                            BmiLevel(
+                                bulletColor = colorResource(R.color.light_blue),
+                                leftText = stringResource(R.string.underweight),
+                                rightText = "<${convertNumberToLocale(18.5)}",
+                                isFilled = if (bmi.bmiStatus == BmiStatus.UNDER_WEIGHT) true else false
+                            )
+                            BmiLevel(bulletColor = colorResource(R.color.light_green), leftText = stringResource(R.string.underweight), rightText = "<${convertNumberToLocale(18.5)}", isFilled = if (bmi.bmiStatus== BmiStatus.NORMAL) true else false)
+                            BmiLevel(bulletColor = colorResource(R.color.yellow), leftText = stringResource(R.string.underweight), rightText = "<${convertNumberToLocale(18.5)}", isFilled = if (bmi.bmiStatus== BmiStatus.OBESITY_1) true else false)
+                            BmiLevel(bulletColor = colorResource(R.color.light_orange), leftText = stringResource(R.string.underweight), rightText = "<${convertNumberToLocale(18.5)}", isFilled = if (bmi.bmiStatus== BmiStatus.OBESITY_2) true else false)
+                            BmiLevel(bulletColor = colorResource(R.color.dark_orange), leftText = stringResource(R.string.underweight), rightText = "<${convertNumberToLocale(18.5)}", isFilled = if (bmi.bmiStatus== BmiStatus.OBESITY_3) true else false)
+                            BmiLevel(bulletColor = colorResource(R.color.red), leftText = stringResource(R.string.underweight), rightText = "<${convertNumberToLocale(18.5)}", isFilled = if (bmi.bmiStatus== BmiStatus.OVER_WEIGHT) true else false)
+
+                        }
                         Divider(
                             modifier = Modifier
                                 .width(300.dp)
                                 .height(3.dp)
                         )
                         Button(onClick = {
-                            navegacao.navigate("dados")
-                        } ,
+                            navegacao!!.navigate("dados")
+                        },
                             modifier=Modifier
                                 .padding(top=20.dp),
                             shape = RoundedCornerShape(20.dp),
@@ -210,7 +235,7 @@ fun BMIResultScreen(navegacao: NavHostController) {
                             Text(
                                 modifier = Modifier,
                                 text = stringResource(R.string.newcalc),
-
+                                color = Color.White
                                 )
                         }
                     }
@@ -225,5 +250,5 @@ fun BMIResultScreen(navegacao: NavHostController) {
 /*@Preview(showSystemUi = true)
 @Composable
 private fun BMIResultScreenPreview() {
-    BMIResultScreen()
+    BMIResultScreen(null)
 }*/
